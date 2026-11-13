@@ -1,0 +1,101 @@
+
+========== COGNISYS STARTED ==========
+Starting system monitoring...
+Starting application tracking...
+Both collectors are running.
+
+========== COGNISYS DATABASE ==========
+
+Database initialized successfully!
+Database location: G:\COGNISYS\COGNISYS_-My-Personal-PC-INTELLIGENCE\data\cognisys.db
+Table 1: system_metrics
+Table 2: application_sessions
+
+========== COGNISYS DATABASE ==========
+
+Database initialized successfully!
+Database location: G:\COGNISYS\COGNISYS_-My-Personal-PC-INTELLIGENCE\data\cognisys.db
+Table 1: system_metrics
+Table 2: application_sessions
+
+========== COGNISYS USAGE TRACKER ==========
+
+COGNISYS DATA COLLECTION STARTED
+Collection interval: 10 seconds
+Press CTRL + C to stop.
+
+
+Application tracking started.
+Sampling interval: 5 seconds
+Press CTRL + C to stop.
+
+Started: Code.exe
+Saved | CPU: 63.5% | RAM: 58.5%
+Saved: Code.exe | Duration: 10.0 seconds
+Started: chrome.exe
+Saved | CPU: 15.3% | RAM: 58.0%
+Saved: chrome.exe | Duration: 5.1 seconds
+Started: Code.exe
+Saved | CPU: 34.4% | RAM: 58.1%
+Saved | CPU: 15.3% | RAM: 57.9%
+Saved | CPU: 15.2% | RAM: 57.9%
+Saved | CPU: 13.6% | RAM: 57.9%
+
+========== COGNISYS STARTED ==========
+Starting system monitoring...
+Starting application tracking...
+Both collectors are running.
+
+========== COGNISYS DATABASE ==========
+
+Database initialized successfully!
+Database location: G:\COGNISYS\COGNISYS_-My-Personal-PC-INTELLIGENCE\data\cognisys.db
+Table 1: system_metrics
+Table 2: application_sessions
+
+========== COGNISYS USAGE TRACKER ==========
+
+Application tracking started.
+Sampling interval: 5 seconds
+Press CTRL + C to stop.
+
+
+========== COGNISYS DATABASE ==========
+
+Database initialized successfully!
+Database location: G:\COGNISYS\COGNISYS_-My-Personal-PC-INTELLIGENCE\data\cognisys.db
+Table 1: system_metrics
+Table 2: application_sessions
+
+COGNISYS DATA COLLECTION STARTED
+Collection interval: 10 seconds
+Press CTRL + C to stop.
+
+Started: Code.exe
+Saved | CPU: 24.3% | RAM: 58.3%
+Saved | CPU: 20.4% | RAM: 58.1%
+Saved | CPU: 13.2% | RAM: 56.4%
+Saved | CPU: 16.3% | RAM: 56.2%
+Saved | CPU: 15.6% | RAM: 56.2%
+Saved | CPU: 19.3% | RAM: 56.3%
+Saved | CPU: 15.2% | RAM: 55.9%
+Saved | CPU: 17.2% | RAM: 55.7%
+Saved | CPU: 7.3% | RAM: 55.5%
+Saved | CPU: 9.6% | RAM: 55.6%
+Saved | CPU: 12.5% | RAM: 55.5%
+Saved | CPU: 10.8% | RAM: 55.7%
+Saved | CPU: 18.1% | RAM: 55.7%
+Saved | CPU: 10.4% | RAM: 55.6%
+Saved | CPU: 16.0% | RAM: 55.6%
+Saved: Code.exe | Duration: 160.0 seconds
+Started: chrome.exe
+Saved | CPU: 18.1% | RAM: 56.4%
+Saved: chrome.exe | Duration: 15.2 seconds
+Started: Code.exe
+Saved | CPU: 34.4% | RAM: 57.3%
+Saved: Code.exe | Duration: 5.1 seconds
+Started: chrome.exe
+Saved | CPU: 27.8% | RAM: 56.7%
+Saved: chrome.exe | Duration: 10.1 seconds
+Started: Code.exe
+Saved | CPU: 19.8% | RAM: 56.8%
