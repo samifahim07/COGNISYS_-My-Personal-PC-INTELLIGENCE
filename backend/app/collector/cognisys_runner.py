@@ -1,62 +1,129 @@
 
-import time
 import threading
+import msvcrt
 
 from pathlib import Path
-from contextlib import redirect_stdout, redirect_stderr
 
 from backend.app.collector.data_collector import start_collection
 from backend.app.collector.usage_tracker import start_usage_tracking
 
 
-# Project paths
 PROJECT_ROOT = Path(__file__).resolve().parents[3]
-LOG_PATH = PROJECT_ROOT / "logs" / "cognisys.log"
+LOCK_PATH = PROJECT_ROOT / "data" / "cognisys.lock"
+
+
+def acquire_lock():
+
+    LOCK_PATH.parent.mkdir(parents=True, exist_ok=True)
+
+    lock_file = open(LOCK_PATH, "a+b")
+
+    if LOCK_PATH.stat().st_size == 0:
+        lock_file.write(b"0")
+        lock_file.flush()
+
+    lock_file.seek(0)
+
+    try:
+        msvcrt.locking(
+            lock_file.fileno(),
+            msvcrt.LK_NBLCK,
+            1
+        )
+
+        return lock_file
+
+    except OSError:
+        lock_file.close()
+        return None
+
+
+def release_lock(lock_file):
+
+    if lock_file is not None:
+
+        try:
+            lock_file.seek(0)
+
+            msvcrt.locking(
+                lock_file.fileno(),
+                msvcrt.LK_UNLCK,
+                1
+            )
+
+        finally:
+            lock_file.close()
 
 
 def start_cognisys():
 
-    LOG_PATH.parent.mkdir(
-        parents=True,
-        exist_ok=True
+    lock_file = acquire_lock()
+
+    if lock_file is None:
+
+        print("\nCOGNISYS IS ALREADY RUNNING!")
+        print("Only one instance is allowed.")
+        return
+
+    stop_event = threading.Event()
+
+    print("\n========== COGNISYS ==========")
+    print("COGNISYS is starting...")
+
+    system_thread = threading.Thread(
+        target=start_collection,
+        kwargs={
+            "interval": 10,
+            "stop_event": stop_event
+        }
     )
 
-    with open(LOG_PATH, "a", encoding="utf-8", buffering=1) as log_file:
+    usage_thread = threading.Thread(
+        target=start_usage_tracking,
+        kwargs={
+            "interval": 5,
+            "stop_event": stop_event
+        }
+    )
 
-        with redirect_stdout(log_file), redirect_stderr(log_file):
+    try:
 
-            print("\n========== COGNISYS STARTED ==========")
+        system_thread.start()
+        usage_thread.start()
 
-            print("Starting system monitoring...")
-            print("Starting application tracking...")
+        print("\nCOGNISYS IS RUNNING")
+        print("System Monitor: RUNNING")
+        print("Application Tracker: RUNNING")
+        print("Press CTRL + C to stop safely.\n")
 
-            # System monitoring thread
-            system_thread = threading.Thread(
-                target=start_collection,
-                kwargs={"interval": 10},
-                daemon=True
-            )
+        while system_thread.is_alive() or usage_thread.is_alive():
 
-            # Application tracking thread
-            usage_thread = threading.Thread(
-                target=start_usage_tracking,
-                kwargs={"interval": 5},
-                daemon=True
-            )
+            system_thread.join(timeout=0.5)
+            usage_thread.join(timeout=0.5)
 
-            system_thread.start()
-            usage_thread.start()
+    except KeyboardInterrupt:
 
-            print("Both collectors are running.")
+        print("\nCOGNISYS SHUTDOWN REQUESTED...")
 
-            try:
+        stop_event.set()
 
-                while True:
-                    time.sleep(1)
+        system_thread.join()
+        usage_thread.join()
 
-            except KeyboardInterrupt:
+        print("\nAll collectors stopped safely.")
+        print("COGNISYS STOPPED.")
 
-                print("COGNISYS stopped manually.")
+    finally:
+
+        stop_event.set()
+
+        if system_thread.is_alive():
+            system_thread.join()
+
+        if usage_thread.is_alive():
+            usage_thread.join()
+
+        release_lock(lock_file)
 
 
 if __name__ == "__main__":

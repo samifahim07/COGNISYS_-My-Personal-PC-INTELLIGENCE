@@ -1,9 +1,12 @@
 
 import json
-import time
+import threading
 
 from backend.app.collector.system_monitor import get_system_metrics
-from backend.app.database.connection import get_connection, initialize_database
+from backend.app.database.connection import (
+    get_connection,
+    initialize_database
+)
 
 
 def save_metrics(metrics):
@@ -42,34 +45,34 @@ def save_metrics(metrics):
     connection.close()
 
 
-def start_collection(interval=10):
+def start_collection(interval=10, stop_event=None):
+
+    if stop_event is None:
+        stop_event = threading.Event()
 
     initialize_database()
 
-    print("\nCOGNISYS DATA COLLECTION STARTED")
-    print("Collection interval: 10 seconds")
-    print("Press CTRL + C to stop.\n")
+    print("\nCOGNISYS SYSTEM COLLECTION STARTED")
+    print(f"Collection interval: {interval} seconds")
 
-    try:
+    while not stop_event.is_set():
 
-        while True:
+        try:
 
             metrics = get_system_metrics()
 
             save_metrics(metrics)
 
             print(
-                f"Saved | "
+                f"System Saved | "
                 f"CPU: {metrics['cpu']['usage_percent']}% | "
                 f"RAM: {metrics['ram']['usage_percent']}%"
             )
 
-            time.sleep(interval)
+        except Exception as error:
 
-    except KeyboardInterrupt:
+            print(f"System Collector Error: {error}")
 
-        print("\nCOGNISYS DATA COLLECTION STOPPED.")
+        stop_event.wait(interval)
 
-
-if __name__ == "__main__":
-    start_collection()
+    print("System collector stopped safely.")
